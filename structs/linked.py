@@ -1,3 +1,7 @@
+"""
+YEETTT
+
+"""
 class Node:
     def __init__(self, val=None, next=None):
         self.val = val
@@ -37,7 +41,7 @@ class Linked:
 
         return False
 
-    def forEach(self, fn):
+    def _for_each(self, fn):
         cur = self.head
         count = 0
         while cur:
@@ -66,6 +70,18 @@ class Linked:
             return False
         return True
 
+    def reverse(self):
+        prev = self.head
+        cur = prev.next
+        prev.next = None
+        while cur:
+            next = cur.next
+            cur.next = prev
+            prev = cur
+            cur = next
+
+        self.head = prev
+
 
 linked = Linked()
 linked.insert(1)
@@ -79,6 +95,18 @@ print(linked.get_all())
 print(linked.delete(5))
 print(linked.get_all())
 print('---')
+ll = Linked()
+ll.insert(1)
+ll.insert(2)
+ll.insert(3)
+ll.insert(4)
+print('$$$$$$$$')
+ll.reverse()
+print(ll.get_all())
+print('$$$$$$$$')
+# print(linked.get_all())
+
+print('recursive linked list')
 
 
 class LinkedListRecursive:
@@ -111,15 +139,15 @@ class LinkedListRecursive:
     def contains(self, val):
         return self._contains(self.head, val)
 
-    def _forEach(self, head, num, fn):
+    def _for_each(self, head, num, fn):
         if head is None:
             return
         else:
             fn(head, num)
-            self._forEach(head.next, num + 1, fn)
+            self._for_each(head.next, num + 1, fn)
 
-    def forEach(self, fn):
-        return self._forEach(self.head, 0, fn)
+    def for_each(self, fn):
+        return self._for_each(self.head, 0, fn)
 
     def _sum(self, cur):
         if cur is None:
@@ -146,6 +174,17 @@ class LinkedListRecursive:
         else:
             return self._delete(self.head, val)
 
+    def _reverse(self, cur, prev=None):
+        if cur:
+            next = cur.next
+            cur.next = prev
+            return self._reverse(next, cur)
+        else:
+            return prev
+
+    def reverse(self, ):
+        self.head = self._reverse(self.head, None)
+
 
 llr = LinkedListRecursive()
 
@@ -155,13 +194,16 @@ llr.insert(3)
 llr.insert(4)
 llr.insert(5)
 
+llr.reverse()
+llr.for_each(lambda node, i: print(node.val))
+
 print(llr.contains(3))
 print(llr.contains(4))
 print('sum', llr.sum())
 
-llr.forEach(lambda node, i: print(node.val))
+llr.for_each(lambda node, i: print(node.val))
 llr.delete(1)
 llr.delete(3)
 llr.delete(5)
 print('---')
-llr.forEach(lambda node, i: print(node.val))
+llr.for_each(lambda node, i: print(node.val))
