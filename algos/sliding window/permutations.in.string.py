@@ -192,6 +192,7 @@ def smallest_substring_better(string, pattern):
     return shortest_match if len(shortest_match) != len(string) else ''
 
 
+# O(n + k)
 def smallest_substring_adjusted(string, pattern):
     char_freq = {}
     for char in pattern:
@@ -218,19 +219,6 @@ def smallest_substring_adjusted(string, pattern):
                     matched -= 1
                 char_freq[prev] += 1
             start += 1
-
-
-        # if matched == len(char_freq):
-        #     while True:
-        #         prev = string[start]
-        #         if prev in char_freq:
-        #             if char_freq[prev] == 0:
-        #                 break
-        #             char_freq[prev] += 1
-        #         start += 1
-        #
-        #     if len(string[start:end + 1]) < len(shortest_match):
-        #         shortest_match = string[start:end + 1]
 
     return shortest_match if len(shortest_match) != len(string) else ''
 
