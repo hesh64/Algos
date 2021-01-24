@@ -58,6 +58,33 @@ def any_overlap(intervals):
     return False
 
 
+# apparently because the list is sorted we should come up with a solution
+# that's better than O(n*log(n))
+# ok noew it's O(n)
+def insert_interval(intervals, new):
+    merged_ = []
+
+    i = 0
+    while i < len(intervals) and intervals[i].end < new.start:
+        merged_.append(intervals[i])
+        i += 1
+
+    start, end = new.start, new.end
+
+    while i < len(intervals) and end >= intervals[i].start:
+        end = max(end, intervals[i].end)
+        start = min(start, intervals[i].start)
+        i += 1
+
+    merged_.append(Interval(start, end))
+
+    while i < len(intervals):
+        merged_.append(intervals[i])
+        i += 1
+
+    return merged_
+
+
 def main():
     res = merge_intervals([Interval(1, 4), Interval(2, 5), Interval(7, 9)])
     print(res)
@@ -67,6 +94,11 @@ def main():
     print(res)
 
     res = any_overlap([Interval(1, 4), Interval(2, 5), Interval(7, 9)])
+    print(res)
+
+    res = insert_interval([Interval(1, 3), Interval(5, 7), Interval(8, 12)], Interval(4, 6))
+    print(res)
+    res = insert_interval([Interval(1, 3), Interval(5, 7), Interval(8, 12)], Interval(4, 10))
     print(res)
 
 
