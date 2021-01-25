@@ -85,6 +85,72 @@ def insert_interval(intervals, new):
     return merged_
 
 
+"""
+Problem Statement #
+Given two lists of intervals, find the intersection of these two lists. 
+Each list consists of disjoint intervals sorted on their start time.
+"""
+
+
+def merge(inter_a, inter_b):
+    i, j = 0, 0
+    intersections = []
+
+    while i < len(inter_a) and j < len(inter_b):
+        a_overlaps_b = inter_b[j].start <= inter_a[i].start <= inter_b[j].end
+        b_overlaps_a = inter_a[i].start <= inter_b[j].start <= inter_a[i].end
+
+        if a_overlaps_b or b_overlaps_a:
+            intersections.append(Interval(max(inter_a[i].start, inter_b[j].start), min(inter_a[i].end, inter_b[j].end)))
+
+        if inter_a[i].end < inter_b[j].end:
+            i += 1
+        else:
+            j += 1
+
+    return intersections
+
+
+"""
+Given an array of intervals representing ‘N’ appointments, find
+out if a person can attend all the appointments.
+"""
+
+
+def find_conflicting_appointments(intervals):
+    intervals.sort(key=lambda x: x.start)
+
+    for i in range(0, len(intervals) - 1):
+        if intervals[i].end > intervals[i + 1].start:
+            return False
+
+    return True
+
+
+"""
+Minimum Meeting Rooms (hard) #
+Given a list of intervals representing the start and end time of ‘N’ meetings, 
+find the minimum number of rooms required to hold all the meetings.
+"""
+
+
+def minimum_meeting_rooms(intervals):
+    # first we gotta sort
+    intervals.sort(key=lambda x: x.start)
+
+    i = 0
+    merged = [intervals[i]]
+    i += 1
+    while i < len(intervals):
+        if merged[-1].end > intervals[i].start:
+            merged[-1].end = max(merged[-1].end, intervals[i].end)
+        else:
+            merged.append(intervals[i])
+        i += 1
+
+    return len(merged) - len(intervals)
+
+
 def main():
     res = merge_intervals([Interval(1, 4), Interval(2, 5), Interval(7, 9)])
     print(res)
@@ -100,6 +166,30 @@ def main():
     print(res)
     res = insert_interval([Interval(1, 3), Interval(5, 7), Interval(8, 12)], Interval(4, 10))
     print(res)
+
+    inter_a = [Interval(x, y) for x, y in [[1, 3], [5, 6], [7, 9]]]
+    inter_b = [Interval(x, y) for x, y in [[2, 3], [5, 7]]]
+
+    res = merge(inter_a=inter_a, inter_b=inter_b)
+    print('interval intersection', res)
+
+    inter_a = [Interval(x, y) for x, y in [[1, 3], [5, 7], [9, 12]]]
+    inter_b = [Interval(x, y) for x, y in [[5, 10]]]
+
+    res = merge(inter_a=inter_a, inter_b=inter_b)
+    print('interval intersection', res)
+
+    inter_a = [Interval(x, y) for x, y in [[1, 4], [2, 5], [7, 9]]]
+    print('Can I attend all my meetings?', find_conflicting_appointments(inter_a))
+
+    inter_a = [Interval(x, y) for x, y in [[6, 7], [2, 4], [8, 12]]]
+    print('Can I attend all my meetings?', find_conflicting_appointments(inter_a))
+
+    inter_a = [Interval(x, y) for x, y in [[4, 5], [2, 3], [3, 6]]]
+    print('Can I attend all my meetings?', find_conflicting_appointments(inter_a))
+
+    inter_a = [Interval(x, y) for x, y in [[4, 5], [2, 3], [3, 6]]]
+    print('Can I attend all my meetings?', find_conflicting_appointments(inter_a))
 
 
 main()
