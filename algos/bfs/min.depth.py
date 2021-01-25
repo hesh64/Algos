@@ -117,6 +117,67 @@ def binary_tree_level_order_traversal_level_order_traversal_connected(node):
     return nodes
 
 
+"""
+Connect All Level Order Siblings (medium) #
+Given a binary tree, connect each node with its level order successor.
+ The last node of each level should point to the first node of the next level.
+"""
+
+
+def connect_all_level_order_sibling(root):
+    q = deque()
+    last_node = None
+    q.append(root)
+    while q:
+        cur_node = q.popleft()
+
+        if cur_node.left:
+            q.append(cur_node.left)
+
+        if cur_node.right:
+            q.append(cur_node.right)
+
+        if last_node:
+            last_node.right = cur_node
+
+        last_node = cur_node
+
+    return root
+
+
+"""
+Right View of a Binary Tree (easy) #
+Given a binary tree, return an array containing nodes in its right view. 
+The right view of a binary tree is the set of nodes visible when the tree is seen from the right side.
+
+"""
+
+
+def right_view_binary_tree(root):
+    nodes = []
+    q = deque()
+    q.append(root)
+
+    while q:
+        size = len(q)
+        right = None
+        for _ in range(size):
+            cur_node = q.popleft()
+
+            if cur_node.right:
+                q.append(cur_node.right)
+
+            if cur_node.left:
+                q.append(cur_node.left)
+
+            if not right:
+                right = cur_node
+
+        nodes.append(right)
+
+    return nodes
+
+
 def main():
     root = Node(1)
     root.left = Node(2)
@@ -153,7 +214,44 @@ def main():
         while head:
             print(head.value)
             head = head.right
-        print('end of linked list...')
+        print('end of linked list...\n')
+
+    root_test = Node(1)
+    root_test.left = Node(2)
+    root_test.right = Node(3)
+    root_test.left.left = Node(4)
+    root_test.left.right = Node(5)
+    root_test.right.left = Node(6)
+    root_test.right.right = Node(7)
+
+    connect_all_level_order_sibling(root_test)
+    print('one linked list')
+    while root_test:
+        print(root_test)
+        root_test = root_test.right
+
+    print('right view is: ')
+    right_view = Node(1)
+    right_view.left = Node(2)
+    right_view.right = Node(3)
+    right_view.left.left = Node(4)
+    right_view.left.right = Node(5)
+    right_view.right.left = Node(6)
+    right_view.right.right = Node(7)
+
+    result = right_view_binary_tree(right_view)
+    print(result)
+
+    right_view = Node(12)
+    right_view.left = Node(7)
+    right_view.right = Node(1)
+    right_view.left.right = Node(9)
+    right_view.right.left = Node(10)
+    right_view.right.right = Node(5)
+    right_view.left.right.right = Node(3)
+
+    result = right_view_binary_tree(right_view)
+    print(result)
 
 
 main()
