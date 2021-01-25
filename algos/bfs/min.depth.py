@@ -72,7 +72,7 @@ def binary_tree_level_order_traversal_level_order_traversal(node, val):
             current_level.append(curr_node)
         nodes.append(current_level)
 
-    return nodes
+    return None
 
 
 def main():
