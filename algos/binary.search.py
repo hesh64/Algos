@@ -1,9 +1,8 @@
-def binary(x, nums):
+def binary(nums, x):
     s, e = 0, len(nums) - 1
 
     while s <= e:
         mid = (s + e) // 2
-        print(nums[mid], x)
 
         if nums[mid] == x:
             return mid
@@ -17,10 +16,9 @@ def binary(x, nums):
     return -1
 
 
-n = [1, 2, 3, 4, 5]
+n = [1, 2, 3]
 
-print(binary(9, [-1,0,3,5,9,12]))
-
+print(binary(n, 3))
 
 # def binary_pivot(nums):
 #     s, e = 0, len(nums) - 1
