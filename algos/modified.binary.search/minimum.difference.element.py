@@ -99,6 +99,60 @@ def binary_search_both(array, key, start, end):
     return -1
 
 
+"""
+Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given 
+‘key’ is present in it.
+
+Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. You can
+assume that the given array does not have any duplicates.
+
+
+-- nice we were able to solve this.
+"""
+
+
+def another_search(array, key, start, end):
+    while start <= end:
+        mid = start + (end - start)
+
+        if array[mid] == key:
+            return mid
+
+        if array[start] < array[end]:
+            if array[mid] < key:
+                start = mid + 1
+            else:
+                end = mid - 1
+        else:
+            if array[mid] < key:
+                end = mid - 1
+            else:
+                start = mid + 1
+
+    return None
+
+
+def search_rotated(array, key):
+    start, end = 0, len(array) - 1
+
+    while start < end:
+        mid = start + (end + start) // 2
+        # gotta tweak it a little,
+        # you just want end to be the min
+        if array[mid] < array[mid + 1]:
+            end = mid
+        else:
+            start = mid + 1
+
+    min_start = end
+
+    found = another_search(array, key, 0, min_start + 1)
+    if found is None:
+        found = another_search(array, key, min_start, len(array) - 1)
+
+    return found
+
+
 def main():
     array, key = [4, 6, 8, 10], 7
     result = min_diff_element(array, key)
@@ -130,6 +184,14 @@ def main():
 
     array, key = [1, 3, 8, 4, 3], 4
     result = search_bitonic_array(array, key)
+    print(result)
+
+    array, key = [10, 15, 1, 3, 8], 15
+    result = search_rotated(array, key)
+    print(result)
+
+    array, key = [4, 5, 7, 9, 10, -1, 2], 10
+    result = search_rotated(array, key)
     print(result)
 
 
