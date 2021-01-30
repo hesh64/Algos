@@ -56,5 +56,8 @@ def main():
     result = subset_w_duplicates([1, 5, 3, 3])
     print(result)
 
+    result = subset_w_duplicates([1, 1, 2, 2])
+    print(result)
+
 
 main()

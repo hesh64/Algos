@@ -2,7 +2,7 @@ def binary(nums, x):
     s, e = 0, len(nums) - 1
 
     while s <= e:
-        mid = (s + e) // 2
+        mid = s + (e - s) // 2
 
         if nums[mid] == x:
             return mid
