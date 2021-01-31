@@ -22,16 +22,24 @@ to a 1. For example, the binary complement of “1010” is “0101”.
 For a given positive number N in base-10, return the complement of its binary representation as a base-10 integer.
 """
 
+
 # come back to this if we have time!
-# def complement_base_10:
+def complement_base_10(num):
+    bit_count, n = 0, num
+    while n > 0:
+        bit_count += 1
+        n = n >> 1
+
+    all_bits_set = 2 ** bit_count - 1
+
+    return num ^ all_bits_set
 
 
 def main():
-    # result = single_number([7, 9, 7])
-    # print(result)
+    result = single_number([7, 9, 7])
+    print(result)
 
-    print([i for i in bin(8)[2:]])
-    print([(int(i) ^ 1) for i in bin(8)[2:]])
+    print('bitwise complement is:', complement_base_10(8))
 
 
 main()
