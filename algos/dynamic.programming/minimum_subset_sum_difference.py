@@ -2,6 +2,7 @@
 Given a set of positive numbers, partition the set into two subsets with minimum difference between their subset sums.
 """
 
+
 # O(2 ^ n)
 def can_partition_minimum(nums):
     return can_partition_recursive(nums, 0, 0, 0)
