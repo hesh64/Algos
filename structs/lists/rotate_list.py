@@ -4,16 +4,18 @@ elements will appear at the left-most position in the list and so on. You only h
 at a time.
 """
 
-# todo come back to this
 
-
+# time O(n)
+# space O(n)
 def right_rotate(lst, k):
-    length = len(lst)
+    rotated = []
+    for ele in lst[len(lst) + 1 - k:]:
+        rotated.append(ele)
 
-    for i in range(k):
-        lst[i], lst[length - (k + i + 1)] = lst[length -(k + i + 1)], lst[i]
+    for ele in lst[: len(lst) + 1 - k]:
+        rotated.append(ele)
 
-    return lst
+    return rotated
 
 
 def main():
