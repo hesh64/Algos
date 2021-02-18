@@ -2,15 +2,20 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next_element = None
+        self.prev_element = None
 
 
 class LinkedList:
     def __init__(self):
         self.head_node = None
+        self.tail_node = None
 
     # Time O(1)
     def get_head(self):
         return self.head_node
+
+    def get_tail(self):
+        return self.tail_node
 
     # Time O(1)
     def is_empty(self):
@@ -20,8 +25,15 @@ class LinkedList:
     def insert_at_head(self, data):
         new_head = Node(data)
         new_head.next_element = self.head_node
+        if self.head_node is not None:
+            self.head_node.prev_element = new_head
+
         self.head_node = new_head
-        return self.head_node
+
+        if self.tail_node is None:
+            self.tail_node = new_head
+
+        return self.get_head()
 
     # Time O(n) where n is length of list.
     def insert_at_tail(self, data):
@@ -29,11 +41,10 @@ class LinkedList:
             self.insert_at_head(data)
             return
 
-        temp = self.get_head()
-        while temp.next_element is not None:
-            temp = temp.next_element
-
-        temp.next_element = Node(data)
+        tail = self.get_tail()
+        tail.next_element = Node(data)
+        tail.next_element.prev_element = tail
+        self.tail_node = tail
 
     # Time O(k) where 0 <= k < n
     def insert_at_kth(self, k, data):
@@ -158,62 +169,25 @@ class LinkedList:
         return True
 
 
-def reverse_lst(lst):
-    prev, cur = None, lst.get_head()
-    next = cur.next_element
-
-    while next:
-        cur.next_element = prev
-        prev = cur
-        cur = next
-        next = next.next_element
-
-    cur.next_element = prev
-    lst.head_node = cur
-    return cur
-
-
-def detect_loop(lst):
-    slow = lst.get_head()
-
-    if slow is None:
-        return False
-
-    fast = slow.next_element
-
-    while fast.next_element:
-        fast = fast.next_element
-
-        if slow == fast:
-            return True
-
-        slow = slow.next_element
-        fast = fast.next_element
-
-    return False
-
-
 def main():
     lst = LinkedList()
     for i in range(1, 10):
         lst.insert_at_head(i)
 
     lst.print_list()
-    reverse_lst(lst)
+
+    lst = LinkedList()
+    for i in range(1, 10):
+        lst.insert_at_tail(i)
+
     lst.print_list()
 
-    # lst = LinkedList()
-    # for i in range(1, 10):
-    #     lst.insert_at_tail(i)
-    #
-    # lst.print_list()
-    #
-    # print(lst.search_itr(7))
-    # print(lst.search_rec(7))
-    #
-    # lst.print_list()
-    # lst.delete(7)
-    # lst.print_list()
+    print(lst.search_itr(7))
+    print(lst.search_rec(7))
+
+    lst.print_list()
+    lst.delete(7)
+    lst.print_list()
 
 
 main()
