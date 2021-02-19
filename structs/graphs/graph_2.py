@@ -133,6 +133,14 @@ def dfs(graph, source):
     return returned
 
 
+"""
+The concept of loops or cycles is very common in graph theory. A cycle exists when you traverse the directed 
+graph and come upon a vertex that has already been visited.
+
+You have to implement the detect_cycle function which tells you whether or not a graph contains a cycle.
+"""
+
+
 def find_cycle_rec(g, ver, visited, stack):
     if stack[ver]:
         return True
@@ -168,6 +176,16 @@ def find_cycle(g):
             return True
 
     return False
+
+
+"""
+You have to implement the find_mother_vertex() function which will take a directed graph as an input and find out
+ which vertex is the mother vertex in the graph.
+
+By definition, the mother vertex is a vertex in a graph such that all other vertices in a graph can be reached by 
+following a path from that vertex. A graph can have multiple mother vertices, but you only need to find one.
+
+"""
 
 
 # O(V(V + E))
@@ -241,6 +259,14 @@ def dfs_kosaraju(g, source, visited):
             cur = cur.next
 
 
+"""
+You have to implement the num_edges() function which takes an undirected graph and computes the total number of 
+bidirectional edges. An illustration is also provided for your understanding.
+
+"""
+
+
+# O(V+E)
 # count the number of edges in a unidirected graph
 def num_edges(g):
     sum = 0
@@ -250,6 +276,108 @@ def num_edges(g):
             sum += 1
             cur = cur.next
     return sum // 2
+
+
+"""
+You have to implement the check_path() function. It takes a source vertex and a destination vertex and tells us
+ whether or not a path exists between the two.
+
+"""
+
+
+def check_path(g, source, destination):
+    if source == destination:
+        return True
+
+    cur = g.array[source].get_head()
+    while cur:
+        if cur.value == destination or check_path(g, cur.value, destination):
+            return True
+
+        cur = cur.next
+
+    return False
+
+
+"""
+The next section will tackle the tree data structure. For now, here’s the basic difference between a graph and a tree.
+ A graph can only be a tree under two conditions:
+
+There are no cycles.
+The graph is connected
+"""
+
+
+def check_cycle(g, node, visited, parent):
+    visited[node] = True
+
+    cur = g.array[node].get_head()
+    while cur:
+        if visited[cur.value] is False:
+            if check_cycle(g, cur.value, visited, node) is True:
+                return True
+
+        # you cant equal a visited item, and not be the parent!
+        # not in this graph you wont!
+        elif cur.data is not parent:
+            return True
+
+    return False
+
+
+def is_tree(g):
+    visited = [False] * g.vertices
+
+    if check_cycle(g, 0, visited, -1):
+        return False
+
+    if any(i is False for i in visited):
+        return False
+
+    return True
+
+
+"""
+Implement the find_min() function which will take a directed graph and two vertices, A and B. The result will be the
+shortest path from A to B.
+
+Remember, the shortest path will contain the minimum number of edges.
+
+"""
+
+
+# O(V + E)
+def get_min_length_path(g, source, destination):
+    min_len = float('inf')
+
+    def dfs(g, s, d, le=0):
+        nonlocal min_len
+        if s == d:
+            min_len = min(min_len, le)
+            return
+
+        cur = g.array[source].get_head()
+        while cur:
+            dfs(g, cur.value, destination, le + 1)
+            cur = cur.next
+
+    dfs(g, source, destination, 0)
+    return min_len
+
+
+"""You must implement the remove_edge function which takes a source and a destination as arguments. If an edge  
+between the two, it should be deleted."""
+
+
+# O(E) because you can have all the edges sitting between the two nodes
+def delete_edge(g, s, d):
+    if len(g.array) == 0:
+        return False
+
+    if 0 <= s < g.vertices and 0 <= d < g.vertices:
+        g.array[s].delete(d)
+
+    return g
 
 
 def main():
@@ -302,6 +430,22 @@ def main():
     g.add_edge(7, 8)
 
     print('number of edges:', num_edges(g))
+
+    g = Graph(9)
+    g.add_edge(0, 2)
+    g.add_edge(0, 5)
+    g.add_edge(2, 3)
+    g.add_edge(2, 4)
+    g.add_edge(5, 3)
+    g.add_edge(5, 6)
+    g.add_edge(3, 6)
+    g.add_edge(6, 7)
+    g.add_edge(6, 8)
+    g.add_edge(6, 4)
+    g.add_edge(7, 8)
+    g.print_graph()
+
+    print('is there a path between 0 to 8', check_path(g, 0, 8))
 
 
 main()
