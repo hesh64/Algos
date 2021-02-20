@@ -111,7 +111,7 @@ def duplicate(nums):
     dup = None
     while i < len(nums):
         target = nums[i] - 1
-        if nums[i] == nums[j]:
+        if nums[i] == nums[target]:
             dup = nums[i]
 
         if nums[target] != nums[i]:
