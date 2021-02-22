@@ -34,6 +34,7 @@ class HashTable:
         hash_code = hash(key)
         return hash_code % self.slots
 
+    # O(n)
     def insert(self, key, value):
         index = self.get_index(key)
         entry = HashEntry(key, value)
@@ -53,6 +54,7 @@ class HashTable:
 
         return index
 
+    # O(n)
     def resize(self):
         new_slots = self.slots * 2
         new_buckets = [None] * new_slots
@@ -84,6 +86,31 @@ class HashTable:
 
         return ''.join(ls)
 
+    # avg O(1) at the worst O(n)
+    def search(self, key):
+        b_index = self.get_index(key)
+        bucket = self.buckets[b_index]
+        while bucket is not None:
+            if bucket.key == key:
+                return bucket.value
+            bucket = bucket.next_entry
+
+        return -1
+
+    # O(1) avg O(n) at the worst
+    def delete(self, key):
+        b_index = self.get_index(key)
+        bucket = self.buckets[b_index]
+        if bucket is not None and bucket.key == key:
+            self.buckets[b_index] = self.buckets[b_index].next_entry
+            return True
+
+        while bucket.next_entry:
+            if bucket.next_entry.key == key:
+                bucket.next_entry = bucket.next_entry.next_entry
+                return True
+        return False
+
 
 def main():
     ht = HashTable(10)
@@ -91,8 +118,14 @@ def main():
     for _ in range(1000):
         rand = random.randint(0, 1000000)
         ht.insert(rand, rand)
-        print('Table state')
-        print(ht)
+    print('Table state')
+    print(ht)
+    print('$$$')
+    print(ht.search(300783))
+    print(ht.delete(300783))
+    print(ht.delete(472290))
+    print('table state')
+    print(ht)
 
 
 main()
