@@ -193,6 +193,22 @@ def detect_loop(lst):
     return False
 
 
+def reverse_ll(head):
+    if not head:
+        return None
+
+    tail = reverse_ll(head.next_element)
+    if tail:
+        cur = tail
+        while cur.next_element:
+            cur = cur.next_element
+
+        cur.next_element = head
+        return tail
+
+    return head
+
+
 def main():
     lst = LinkedList()
     for i in range(1, 10):
@@ -200,6 +216,9 @@ def main():
 
     lst.print_list()
     reverse_lst(lst)
+    lst.print_list()
+
+    reverse_ll(lst.head_node)
     lst.print_list()
 
     # lst = LinkedList()
