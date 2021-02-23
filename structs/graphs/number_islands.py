@@ -56,6 +56,7 @@ area is 0.)
 """
 
 
+# O(V^2)
 def largest_islands(m):
     visited = [[False for _ in range(len(m[0]))] for _ in range(len(m))]
 
@@ -106,10 +107,23 @@ def exists(m, word):
 
         _visited[x][y] = True
 
-        return True and (dfs(_m, x - 1, y, _visited, word, idx + 1) or
-                         dfs(_m, x + 1, y, _visited, word, idx + 1) or
-                         dfs(_m, x, y + 1, _visited, word, idx + 1) or
-                         dfs(_m, x, y - 1, _visited, word, idx + 1))
+        found = False
+        if dfs(_m, x - 1, y, _visited, word, idx + 1):
+            found = True
+
+        elif dfs(_m, x + 1, y, _visited, word, idx + 1):
+            found = True
+
+        elif dfs(_m, x, y + 1, _visited, word, idx + 1):
+            found = True
+        elif dfs(_m, x, y - 1, _visited, word, idx + 1):
+            found = True
+
+        if found is False:
+            _visited[x][y] = False
+            return False
+
+        return True
 
     for row in range(len(m)):
         for col in range(len(m[0])):

@@ -1,24 +1,9 @@
-"""
-In the previous section, we covered several common types of trees like Red-Black trees, 2-3 trees, etc.
-
-Now, we are going to look at a tree-like data structure that proves to be really efficient while solving programming
-problems related to strings.
-
-This data structure is called a trie and is also known as a Prefix Tree. We will soon find out why.
-
-The tree trie is derived from “retrieval.” As you can guess, the main purpose of using this structure is to provide
- fast retrieval. Tries are mostly used in dictionary word searches, search engine auto-suggestions, and IP
- routing as well.
-
-Autocomplete
-Contact searching
-"""
+from collections import deque
 
 
 class TrieNode:
     def __init__(self, char=''):
         self.char = char
-        # depending on the size of the alphabet
         self.children = [None] * 26
         self.is_end_word = False
 
@@ -34,66 +19,199 @@ class Trie:
         self.root = TrieNode()
 
     def get_index(self, t):
-        """helper to get the index of a letter"""
         return ord(t) - ord('a')
 
+    # Time O(n) where n is len(key)
     def insert(self, key):
         if key is None:
             return
 
         key = key.lower()
-        idx = 0
-        cur = self.root
+        cur_node = self.root
+        index = 0
 
-        while idx < len(key):
-            letter_index = self.get_index(key[idx])
-            if cur.children[letter_index] is None:
-                cur.children[letter_index] = TrieNode(key[idx])
+        for level in range(len(key)):
+            index = self.get_index(key[level])
+            if cur_node.children[index] is None:
+                cur_node.children[index] = TrieNode(key[level])
 
-            cur = cur.children[letter_index]
-            idx += 1
+            cur_node = cur_node.children[index]
 
-        cur.mark_as_leaf()
-        return True
+        print(cur_node.char)
+
+        cur_node.mark_as_leaf()
 
     def search(self, key):
         if key is None:
-            return False
+            return None
 
         key = key.lower()
-        cur = self.root
-        idx = 0
+        cur_node = self.root
 
-        while idx < len(key):
-            letter_index = self.get_index(key[idx])
-
-            if cur.children[letter_index] is None:
+        for level in range(len(key)):
+            index = self.get_index(key[level])
+            if cur_node.children[index] is None:
                 return False
 
-            cur = cur.children[letter_index]
-            idx += 1
+            cur_node = cur_node.children[index]
 
-        return cur.is_end_word
+        # print(53)
+        if cur_node is not None and cur_node.is_end_word:
+            return True
 
-    def has_no_children(self, node):
-        for child in node.children:
-            if child is not None:
+        return False
+
+    def has_no_children(self, current_node):
+        for i in range(len(current_node.children)):
+            if current_node.children[i] is not None:
                 return False
-
         return True
 
-    # def delete(self, key):
-    #     def del_helper(cur, key, idx=0):
-    #         if idx < len(key):
-    #             if self.get_index(key[idx]) in cur.children:
-    #                 del_helper(cur[self.get_index(key[idx])], key, idx + 1)
-    #                 if
+    def delete_helper(self, key, current_node, length, level):
+        deleted_self = False
+
+        if current_node is None:
+            return deleted_self
+
+        if level == length:
+            if self.has_no_children(current_node):
+                current_node = None
+                deleted_self = True
+            else:
+                current_node.unmark_as_leaf()
+                deleted_self = False
+        else:
+            child_node = current_node.children[self.get_index(key[level])]
+            child_deleted = self.delete_helper(key, child_node, length, level + 1)
+
+            if child_deleted:
+                current_node.children[self.get_index(key[level])] = None
+
+                if current_node.is_end_word:
+                    deleted_self = False
+
+                elif self.has_no_children(current_node) is False:
+                    deleted_self = False
+
+                else:
+                    current_node = None
+                    deleted_self = True
+            else:
+                deleted_self = False
+
+        return deleted_self
+
+    def delete(self, key):
+        if self.root is None or key is None:
+            return None
+
+        self.delete_helper(key, self.root, len(key), 0)
+
+
+# O(n)
+def total_words(root):
+    if not root:
+        return 0
+
+    count = 0
+    if root.is_end_word:
+        count += 1
+
+    return count + sum([total_words(child) for child in root.children if child is not None])
+
+
+# time O(n)
+def total_words_itr(root):
+    count = 0
+    q = deque()
+
+    for child in root.children:
+        if child:
+            q.append(child)
+    while q:
+        cur = q.popleft()
+        if cur.is_end_word:
+            count += 1
+        for child in cur.children:
+            if child:
+                q.appendleft(child)
+
+    return count
+
+
+# O(n)
+def sort_list(list):
+    trie = Trie()
+
+    for word in list:
+        trie.insert(word)
+
+    return find_words(trie.root)
+
+
+# time O(n)
+def find_words(root):
+    words = []
+    stack = []
+
+    def _find_words(root, stack):
+        stack.append(root.char)
+        if root.is_end_word:
+            words.append(''.join(stack))
+
+        for child in root.children:
+            if child:
+                _find_words(child, stack)
+
+        stack.pop()
+
+    _find_words(root, stack)
+    return words
+
+def is_formation_possible(list, word):
+    trie = Trie()
+
+    for word in list:
+        trie.insert(word)
+
+    start = 0
 
 
 def main():
-    trie = Trie()
-    trie.insert('able')
-    print(trie.search('able'))
+    t = Trie()
+
+    keys = ["the", "a", "there", "answer", "any",
+            "by", "bye", "their", "abc"]
+
+    for key in keys:
+        t.insert(key)
+
+    print('\n')
+
+    b = t.get_index('b')
+    y = t.get_index('y')
+    e = t.get_index('e')
+    print(t.root.children[b].char)
+    print(t.root.children[b].is_end_word)
+    print(t.root.children[b].children[y].char)
+    print(t.root.children[b].children[y].is_end_word)
+    print(t.root.children[b].children[y].children[e].char)
+    print(t.root.children[b].children[y].children[e].is_end_word)
+
+    print(t.search('bye'))
+    for key in keys:
+        print(f'Is the word "{key}" in trie? {t.search(key)}')
+
+    print(t.search('bye'))
+    print(t.delete('bye'))
+    print(t.search('bye'))
+
+    print(f'trie has {total_words(t.root)} words')
+    print(f'trie has {total_words_itr(t.root)} words')
+
+    words = find_words(t.root)
+    print('words in sorted order: ', words)
+    print(f'sorted list: {keys} result: {sort_list(keys)}')
 
 
 main()
