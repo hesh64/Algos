@@ -135,62 +135,97 @@ def exists(m, word):
     return False
 
 
-def main():
-    grid = [
-        ["1", "1", "1", "1", "0"],
-        ["1", "1", "0", "1", "0"],
-        ["1", "1", "0", "0", "0"],
-        ["0", "0", "0", "0", "0"]
-    ]
-
-    result = count_islands(grid)
-    print(f'there are {result} islans')
-    grid = [
-        ["1", "1", "0", "0", "0"],
-        ["1", "1", "0", "0", "0"],
-        ["0", "0", "1", "0", "0"],
-        ["0", "0", "0", "1", "1"]
-    ]
-    result = count_islands(grid)
-    print(f'there are {result} islans')
-    grid = [
-        ["1", "1", "1"],
-        ["0", "1", "0"],
-        ["1", "1", "1"]
-    ]
-    result = count_islands(grid)
-    print(f'there are {result} islans')
-
-    grid = [[0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
-            [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0],
-            [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]]
-
-    result = largest_islands(grid)
-    print(f'the largest island {result}')
-
-    board = [["A", "B", "C", "E"],
-             ["S", "F", "C", "S"],
-             ["A", "D", "E", "E"]]
-    word = "ABCCED"
-    result = exists(board, word)
-    print(f'does {word} exists? {result}')
-
-    board = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]
-    word = "SEE"
-    result = exists(board, word)
-    print(f'does {word} exists? {result}')
-
-    board = [["A", "B", "C", "E"],
-             ["S", "F", "C", "S"],
-             ["A", "D", "E", "E"]]
-    word = "ABCB"
-    result = exists(board, word)
-    print(f'does {word} exists? {result}')
+"""
+grid = [
+    [1,3,1],
+    [1,5,1],
+    [4,2,1]
+]
+Output: 7
+"""
 
 
-main()
+def count(grid, x, y):
+    s = grid[y][x]
+
+    if x < len(grid[0]) - 1 and y < len(grid) - 1:
+        profit1 = s + count(grid, x + 1, y)
+        profit2 = s + count(grid, x, y + 1)
+        return min(profit1, profit2)
+
+    if x < len(grid[0]) - 1:
+        return s + count(grid, x + 1, y)
+
+    if y < len(grid) - 1:
+        return s + count(grid, x, y + 1)
+
+    return s
+
+
+grid = [
+    [1, 3, 1],
+    [1, 5, 1],
+    [4, 2, 1]
+]
+
+print(count(grid, 0, 0))
+
+# def main():
+#     grid = [
+#         ["1", "1", "1", "1", "0"],
+#         ["1", "1", "0", "1", "0"],
+#         ["1", "1", "0", "0", "0"],
+#         ["0", "0", "0", "0", "0"]
+#     ]
+#
+#     result = count_islands(grid)
+#     print(f'there are {result} islans')
+#     grid = [
+#         ["1", "1", "0", "0", "0"],
+#         ["1", "1", "0", "0", "0"],
+#         ["0", "0", "1", "0", "0"],
+#         ["0", "0", "0", "1", "1"]
+#     ]
+#     result = count_islands(grid)
+#     print(f'there are {result} islans')
+#     grid = [
+#         ["1", "1", "1"],
+#         ["0", "1", "0"],
+#         ["1", "1", "1"]
+#     ]
+#     result = count_islands(grid)
+#     print(f'there are {result} islans')
+#
+#     grid = [[0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+#             [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+#             [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0],
+#             [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+#             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+#             [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+#             [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]]
+#
+#     result = largest_islands(grid)
+#     print(f'the largest island {result}')
+#
+#     board = [["A", "B", "C", "E"],
+#              ["S", "F", "C", "S"],
+#              ["A", "D", "E", "E"]]
+#     word = "ABCCED"
+#     result = exists(board, word)
+#     print(f'does {word} exists? {result}')
+#
+#     board = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]
+#     word = "SEE"
+#     result = exists(board, word)
+#     print(f'does {word} exists? {result}')
+#
+#     board = [["A", "B", "C", "E"],
+#              ["S", "F", "C", "S"],
+#              ["A", "D", "E", "E"]]
+#     word = "ABCB"
+#     result = exists(board, word)
+#     print(f'does {word} exists? {result}')
+
+
+# main()
