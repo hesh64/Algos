@@ -20,11 +20,16 @@ def target_sum_rec(nums, s, t, i):
     elif i == len(nums):
         return 0
 
-    return target_sum_rec(nums, s, t + nums[i], i + 1) \
-           + target_sum_rec(nums, s, t - nums[i], i + 1)
+    return target_sum_rec(nums, s, t + nums[i], i + 1) + target_sum_rec(nums, s, t - nums[i], i + 1)
 
+
+# i don't think there is a way to memoize this
+# but i am probablywrong i wasn't about to
+
+# todo revisit
 
 def main():
+    print('brute')
     set, s = [1, 1, 2, 3], 1
     result = target_sum(set, s)
     print(result)
@@ -32,6 +37,14 @@ def main():
     set, s = [1, 2, 7, 1], 9
     result = target_sum(set, s)
     print(result)
+
+    # print('\nmemo')
+    # set, s = [1, 1, 2, 3], 1
+    # result = target_sum_memo(set, s)
+    # print(result)
+    # set, s = [1, 2, 7, 1], 9
+    # result = target_sum_memo(set, s)
+    # print(result)
 
 
 main()
