@@ -116,7 +116,7 @@ def palindrome_partition(st):
 def palindrome_partition_min(st, start, end):
     # check if the full string is a palindrome -- then you need 0 cuts
     # start > end is our base case
-    if start > end or is_palindrome(st, start, end):
+    if start >= end or is_palindrome(st, start, end):
         return 0
 
     # the max number of cuts we can make is  length - 1

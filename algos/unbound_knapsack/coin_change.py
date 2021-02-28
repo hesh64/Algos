@@ -54,6 +54,34 @@ def coin_memo(dp, din, a, i):
     return dp[i][a]
 
 
+def coin_change_tabul(denominations, total):
+    if len(denominations) == 0 or total <= 0:
+        return 0
+
+    n = len(denominations)
+    dp = [[0 for _ in range(total + 1)] for _ in range(n)]
+
+    # the 0 total set
+    for i in range(n):
+        dp[i][0] = 1
+
+    for i in range(n):
+        for t in range(1, total + 1):
+            # if there is a previous row
+            if i > 0:
+                # grab the value calculated for this position
+                # from the previous row.
+                dp[i][t] = dp[i - 1][t]
+            # if value of s is larger than denominations[i] -> this means
+            # that to compose s we need, denomination[i] + another coin
+            # the way we calculate it is by subtracting the current denomination[i]
+            # from t, to get the left over piece to construct s
+            if t >= denominations[i]:
+                dp[i][t] += dp[i][t - denominations[i]]
+
+    return dp[n - 1][total]
+
+
 def main():
     din, a = [1, 2, 3], 5
     result = coin_change(din, a)
@@ -62,6 +90,9 @@ def main():
     din, a = [1, 2, 3], 5
     result = coin_change_memo(din, a)
     print(result)
+
+    print('\n\n')
+    coin_change_tabul([1, 2, 3], 5)
 
 
 main()
