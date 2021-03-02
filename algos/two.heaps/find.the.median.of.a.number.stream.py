@@ -78,4 +78,5 @@ def main():
     median.insert(4)
     print(median.find_median())
 
+
 main()
