@@ -46,5 +46,6 @@ def main():
     print(ratings.main_stack)
     print("Maximum value: " + str(ratings.max_rating()))
 
+    print(ratings.max_stack)
 
 main()
