@@ -29,6 +29,7 @@ def query_splitter_helper(query, words, i, cur, store):
 
     if i == len(query):
         store.append(cur)
+        return store
 
     for word in words:
         if i + len(word) <= len(query) and query[i: i + len(word)] == word:
