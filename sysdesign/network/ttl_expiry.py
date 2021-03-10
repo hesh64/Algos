@@ -7,6 +7,7 @@ class TreeNode:
         self.children = []
 
 
+# O(n) time and space what a world
 def get_devices(root, server, ttl):
     server_id = server.val
     g = {}
