@@ -1,3 +1,4 @@
+# O(n)
 def update_ids(m, start, old_id, new_id):
     visited = [[False for i in range(len(m[0]))] for j in range(len(m))]
 
