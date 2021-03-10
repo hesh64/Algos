@@ -15,12 +15,12 @@ def get_devices(root, server, ttl):
         nonlocal g
         if root:
             if root.val not in g:
-                g[root.val] = []
+                g[root.val] = set()
             for child in root.children:
                 if child not in g:
-                    g[child.val] = []
-                g[child.val].append(root.val)
-                g[root.val].append(child.val)
+                    g[child.val] = set()
+                g[child.val].add(root.val)
+                g[root.val].add(child.val)
                 dfs(child)
 
     dfs(root)
