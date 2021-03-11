@@ -1,6 +1,8 @@
 from collections import deque
 
 
+# can be further optimized
+
 def minimum_moves(initial_word, final_word, word_group):
     g = {}
     # all words are the same length
@@ -18,20 +20,28 @@ def minimum_moves(initial_word, final_word, word_group):
     que = deque()
     for i in range(n):
         que.append(initial_word[:i] + '_' + initial_word[i + 1:])
-    levels = 1
-
+    levels = 0
+    visited = {initial_word: True}
     while que:
         size = len(que)
+        temp = []
         for _ in range(size):
             node = que.popleft()
+            print(node)
             if node not in g:
                 continue
-            for child in g[node]:
-                if child == final_word:
-                    return levels
-                for i in range(n):
-                    que.append(child[:i] + '_' + child[i + 1:])
-
+            for i in range(n):
+                for child in g[node]:
+                    print(child)
+                    if child in visited:
+                        continue
+                    if child == final_word:
+                        return levels + 1
+                    key = child[:i] + '_' + child[i + 1:]
+                    temp.append(child)
+                    que.append(key)
+        for child in temp:
+            visited[child] = True
         levels += 1
 
     return -1
