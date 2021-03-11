@@ -53,7 +53,7 @@ def find_word(grid, words):
             char = ord(l) - ord('A')
             letters[char] += 1
 
-        # O(n * 3 ^ L) where n is the nubmer of letters in a grid
+        # O(L * (n * 3 ^ L)) where n is the nubmer of letters in a grid
         for row in range(len(grid)):
             for col in range(len(grid[0])):
                 if grid[row][col] == word[0]:
@@ -61,6 +61,13 @@ def find_word(grid, words):
                     if dfs(grid, row, col, letters, visited):
                         found.append(word)
     return found
+
+
+"""
+we can do better that that
+
+use a Trie!
+"""
 
 
 def main():
