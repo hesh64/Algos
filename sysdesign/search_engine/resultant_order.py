@@ -4,6 +4,7 @@ from heapq import *
 
 """A nice rule to know is if a value frequency is more than (n + 1) / 2"""
 
+
 # todo has a bug
 
 # O(n) Time and Space
