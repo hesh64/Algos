@@ -183,6 +183,60 @@ def check_if_graph_is_scc(g: Graph):
     return False
 
 
+def find_all_scc(g: Graph):
+    get_time = make_get_time()
+    color, start, finish = 's', 'f', 'c'
+    g_info = {}
+    for i in range(0, g.V):
+        g_info[i] = {}
+        g_info[i][start] = None
+        g_info[i][finish] = None
+        g_info[i][color] = 'w'
+
+    def dfs_helper(g: Graph, g_info, s, tg):
+        g_info[s][start] = get_time()
+        g_info[s][color] = 'g'
+
+        v: AdjNode = g.graph[s]
+        while v:
+            tg.add_edge(v.vertex, s)
+            if g_info[v.vertex][color] == 'w':
+                g_info[v.vertex][color] = 'g'
+                dfs_helper(g, g_info, v.vertex, tg)
+            v = v.next
+
+        g_info[s][finish] = get_time()
+        g_info[s][color] = 'b'
+
+    gt = Graph(g.V)
+    for i in range(g.V):
+        if g_info[i][color] == 'w':
+            dfs_helper(g, g_info, i, gt)
+
+    tg_info = {}
+    for i in range(0, g.V):
+        tg_info[i] = {}
+        tg_info[i][color] = 'w'
+
+    verts = sorted([i for i in range(g.V)], key=lambda x: g_info[x][finish], reverse=True)
+
+    def dfs(g, g_info, s, comp):
+        if g_info[s][color] != 'w':
+            return
+        comp.append(s)
+        g_info[s][color] = 'g'
+        v = g.graph[s]
+
+        while v:
+            if g_info[v.vertex][color] == 'w':
+                dfs(g, g_info, v.vertex, comp)
+            v = v.next
+
+        return comp.copy()
+
+    return [k for k in [dfs(gt, tg_info, i, []) for i in verts] if k is not None]
+
+
 if __name__ == "__main__":
     V = 6  # Total vertices
     g = Graph(V)
@@ -205,3 +259,20 @@ if __name__ == "__main__":
     g.add_edge(2, 4)
     g.add_edge(4, 2)
     print(check_if_graph_is_scc(g))
+
+    g = Graph(7)
+    g.add_edge(6, 5)
+    g.add_edge(5, 6)
+    g.add_edge(5, 4)
+    g.add_edge(4, 5)
+
+    g.add_edge(0, 1)
+    g.add_edge(1, 0)
+    g.add_edge(1, 2)
+    g.add_edge(2, 1)
+    g.add_edge(2, 3)
+    g.add_edge(3, 2)
+    g.add_edge(3, 0)
+    g.add_edge(0, 3)
+
+    print(find_all_scc(g))
