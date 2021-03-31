@@ -38,6 +38,9 @@ class Graph:
         self.graph[source] = node
 
 
+from collections import deque
+
+
 def number_of_nodes(graph, level):
     """
     Calculates the number of nodes at given level
@@ -50,26 +53,34 @@ def number_of_nodes(graph, level):
     for i in range(graph.V):
         v = graph.graph[i]
         while v:
-            parent_level = 0
-            if i in in_degrees:
-                parent_level = in_degrees[i]
-            in_degrees[v.vertex] += parent_level + 1
+            in_degrees[v.vertex] += 1
             v = v.next
 
-    count = 0
-    for k, v in in_degrees.items():
-        if v + 1 == level:
-            count += 1
+    source = deque()
+    source.extend([k for k, v in in_degrees.items() if v == 0])
+    visited = set()
 
-    return count
+    i = 0
+    while source and i < level:
+        i += 1
+        size = len(source)
+        for _ in range(size):
+            u = source.popleft()
+            v = graph.graph[u]
+            while v:
+                if v.vertex not in visited:
+                    source.append(v.vertex)
+                v = v.next
+
+    return len(source)
 
 
 if __name__ == "__main__":
     V = 5  # Total vertices
     g = Graph(V)
-    g.add_edge(0, 1)
-    g.add_edge(0, 2)
-    g.add_edge(1, 3)
-    g.add_edge(1, 4)
+    g.add_edge(1, 0)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(2, 4)
 
-    print(number_of_nodes(g, 3))
+    print(number_of_nodes(g, 1))
