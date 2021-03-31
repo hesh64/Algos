@@ -37,6 +37,29 @@ class Graph:
         node.next = self.graph[source]
         self.graph[source] = node
 
+    def print_graph(self):
+        """
+        A function to print a graph
+        """
+        for i in range(self.V):
+            print("Adjacency list of vertex {}\n head".format(i), end="")
+            temp = self.graph[i]
+            while temp:
+                print(" -> {}".format(temp.vertex), end="")
+                temp = temp.next
+            print(" \n")
+
+
+def make_get_time():
+    count = -1
+
+    def get_time():
+        nonlocal count
+        count += 1
+        return count
+
+    return get_time
+
 
 from collections import deque
 
@@ -75,12 +98,110 @@ def number_of_nodes(graph, level):
     return len(source)
 
 
+def find_all_paths(g: Graph, s, d):
+    visited = set()
+    paths = []
+
+    def helper(g: Graph, s: int, d, cur, paths, visited):
+        if s in visited:
+            return
+
+        if s == d:
+            c = cur.copy()
+            c.append(d)
+            paths.append(c)
+
+        cur.append(s)
+        visited.add(s)
+
+        v = g.graph[s]
+        while v:
+            helper(g, v.vertex, d, cur, paths, visited)
+            v = v.next
+
+        cur.pop()
+        visited.remove(s)
+
+    helper(g, s, d, [], paths, visited)
+
+    return paths
+
+
+def check_if_graph_is_scc(g: Graph):
+    get_time = make_get_time()
+    color, start, finish = 's', 'f', 'c'
+    g_info = {}
+    for i in range(0, g.V):
+        g_info[i] = {}
+        g_info[i][start] = None
+        g_info[i][finish] = None
+        g_info[i][color] = 'w'
+
+    source = 0
+
+    def dfs_helper(g: Graph, g_info, s, tg=None):
+        if tg is None:
+            tg = Graph(g.V)
+        g_info[s][start] = get_time()
+        g_info[s][color] = 'g'
+
+        v: AdjNode = g.graph[s]
+        while v:
+            tg.add_edge(v.vertex, s)
+            if g_info[v.vertex][color] == 'w':
+                g_info[v.vertex][color] = 'g'
+                dfs_helper(g, g_info, v.vertex, tg)
+            v = v.next
+
+        g_info[s][finish] = get_time()
+        g_info[s][color] = 'b'
+        return tg
+
+    gt = dfs_helper(g, g_info, source)
+
+    smallest_final = float('inf')
+    smallest_source = None
+    for k, v in g_info.items():
+        if v[finish] < smallest_final:
+            smallest_final = v[finish]
+            smallest_source = k
+
+    stack = [smallest_source]
+    visited = {smallest_source}
+    while stack:
+        u = stack.pop()
+        v: AdjNode = gt.graph[u]
+        while v:
+            if v.vertex not in visited:
+                visited.add(v.vertex)
+                stack.append(v.vertex)
+            v = v.next
+
+    if len(visited) == g.V:
+        return True
+
+    return False
+
+
 if __name__ == "__main__":
-    V = 5  # Total vertices
+    V = 6  # Total vertices
     g = Graph(V)
-    g.add_edge(1, 0)
-    g.add_edge(1, 2)
-    g.add_edge(2, 3)
-    g.add_edge(2, 4)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(1, 3)
+    g.add_edge(1, 4)
+    g.add_edge(2, 5)
+    g.add_edge(4, 5)
+    g.add_edge(3, 5)
 
     print(number_of_nodes(g, 1))
+    print(find_all_paths(g, 0, 5))
+
+    g = Graph(5)
+    g.add_edge(0, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 3)
+    g.add_edge(3, 0)
+    g.add_edge(2, 4)
+    g.add_edge(4, 2)
+    print(check_if_graph_is_scc(g))
