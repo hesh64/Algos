@@ -16,6 +16,7 @@ class DisjointItem:
         return f'{(self.key, self.rank)} -> {self.p if self.p != self else "Circulates"}'
 
 
+# O(M alpha n)
 class DisjointSetForest:
     def __init__(self):
         self.sets = set()
@@ -28,12 +29,16 @@ class DisjointSetForest:
         return ds
 
     def find_set(self, x: DisjointItem):
+        # secret sauce 2: on the way back from checking who your parent is, we'll update your .p pointer
+        # to show he is your oldest ancestor! such that you your parent and siblings end up pointing
+        # to the same object.
         if x.p != x:
-            # on the way back from the top, your assiging the final parent to every node
+            # on the way back from the top, your assigning the final parent to every node
             x.p = self.find_set(x.p)
 
         return x.p
 
+    # Secret Sauce 1: Union by rank, if you have a lower rank you're automatically the child
     def link(self, x, y):
         if x.rank > y.rank:
             y.p = x
