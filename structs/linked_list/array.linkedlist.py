@@ -45,6 +45,8 @@ class TripleArrayDoubleLinkedList:
         self.triple[self.cur][next_idx] = k
 
 
+
+
 if __name__ == '__main__':
     ll = TripleArrayDoubleLinkedList()
     for i in range(15):
