@@ -20,20 +20,25 @@ class Graph:
 def prims(g: Graph):
     heap = []
     g_prime = Graph(g.n)
-
+    visited = set()
     for u in range(g.n):
         for v in g.v[u]:
-            heapq.heappush(heap, (g.get_cost(u, v), u, v))
+            # we want to filter out the (u,v) (v, u) reverse edges
+            vert = (min(u, v), max(u, v))
+            if vert not in visited:
+                visited.add(vert)
+                heapq.heappush(heap, (g.get_cost(u, v), u, v))
 
     _, min_edge, _ = heap[0]
     visited = {min_edge}
 
-    while heap:
+    i = 0
+    while i < g.n:
         c, u, v = heapq.heappop(heap)
         if u in visited and v not in visited:
             visited.add(v)
             g_prime.insert_edge(u, v, c)
-
+        i += 1
     return g_prime
 
 
