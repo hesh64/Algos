@@ -17,20 +17,16 @@ class Graph:
         return self.c[(s, d)]
 
 
+# O(M * N) -> O(|V| * |E|)
 def prims(g: Graph):
     heap = []
     g_prime = Graph(g.n)
-    visited = set()
-    for u in range(g.n):
-        for v in g.v[u]:
-            # we want to filter out the (u,v) (v, u) reverse edges
-            vert = (min(u, v), max(u, v))
-            if vert not in visited:
-                visited.add(vert)
-                heapq.heappush(heap, (g.get_cost(u, v), u, v))
+    u = 0
+    visited = {u}
 
-    _, min_edge, _ = heap[0]
-    visited = {min_edge}
+    for v in g.v[u]:
+        # we want to filter out the (u,v) (v, u) reverse edges
+        heapq.heappush(heap, (g.get_cost(u, v), u, v))
 
     i = 0
     while i < g.n:
@@ -38,6 +34,10 @@ def prims(g: Graph):
         if u in visited and v not in visited:
             visited.add(v)
             g_prime.insert_edge(u, v, c)
+
+            for p in g.v[v]:
+                if p not in visited:
+                    heapq.heappush(heap, (g.get_cost(v, p), v, p))
         i += 1
     return g_prime
 
