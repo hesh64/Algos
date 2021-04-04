@@ -24,9 +24,11 @@ def freq_counter(string):
     return items
 
 
+# O(nlog(n))
 def huffman_alg(string):
     heap = freq_counter(string)
 
+    # O(n)
     while len(heap) > 1:
         # min1
         left = heapq.heappop(heap)
@@ -36,7 +38,7 @@ def huffman_alg(string):
         #    ()
         #   /  \
         # min1 min2
-        # ----> heap
+        # ----> heap O(log(n))
         heapq.heappush(heap, [left[0] + right[0], TreeNode(left[1], right[1])])
 
     return heap[0][1]
