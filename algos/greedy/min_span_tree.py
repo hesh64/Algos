@@ -50,6 +50,74 @@ def prims(g: Graph):
     return g_prime
 
 
+class DisjointItem:
+    def __init__(self, key):
+        self.key = key
+        self.rank = 0
+        self.p = self
+
+    def __repr__(self):
+        return f'{(self.key, self.rank)} -> {self.p if self.p != self else "Circulates"}'
+
+
+# O(M alpha n)
+class DisjointSetForest:
+    def __init__(self):
+        self.sets = set()
+
+    def make_set(self, x):
+        ds = DisjointItem(x)
+        ds.p = ds
+        ds.rank = 0
+        self.sets.add(ds)
+        return ds
+
+    def find_set(self, x: DisjointItem):
+        # secret sauce 2: on the way back from checking who your parent is, we'll update your .p pointer
+        # to show he is your oldest ancestor! such that you your parent and siblings end up pointing
+        # to the same object.
+        if x.p != x:
+            # on the way back from the top, your assigning the final parent to every node
+            x.p = self.find_set(x.p)
+
+        return x.p
+
+    # Secret Sauce 1: Union by rank, if you have a lower rank you're automatically the child
+    def link(self, x, y):
+        if x.rank > y.rank:
+            y.p = x
+        else:
+            x.p = y
+            if x.rank == y.rank:
+                y.rank += 1
+
+    def union(self, x, y):
+        self.link(self.find_set(x), self.find_set(y))
+
+
+def kur(g: Graph):
+    print('----')
+    forest = DisjointSetForest()
+    sets = {}
+    edges = []
+    for u in range(g.n):
+        sets[u] = forest.make_set(u)
+        for v in g.v[u]:
+            edges.append((u, v, g.get_cost(u, v)))
+
+    edges.sort(key=lambda x: x[2])
+
+    a = set()
+
+    for u, v, c in edges:
+        if forest.find_set(sets[u]) != forest.find_set(sets[v]):
+            a.add((u, v, c))
+            forest.union(sets[u], sets[v])
+
+    print(a)
+    print('end----')
+
+
 if __name__ == '__main__':
     g = Graph(4)
     g.insert_edge(0, 1, 1)
@@ -62,6 +130,7 @@ if __name__ == '__main__':
     print(g.c)
 
     gp = prims(g)
+    kur(g)
 
     print(gp.v)
     print(gp.c)
