@@ -5,9 +5,6 @@ class TreeNode:
     def __init__(self, left=None, right=None):
         self.left, self.right = left, right
 
-    def nodes(self):
-        return (self.left, self.right)
-
     def __repr__(self):
         return f'({self.left}) ({self.right})'
 
