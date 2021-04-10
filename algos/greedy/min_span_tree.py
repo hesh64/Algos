@@ -96,7 +96,6 @@ class DisjointSetForest:
 
 
 def kur(g: Graph):
-    print('----')
     forest = DisjointSetForest()
     sets = {}
     edges = []
@@ -114,7 +113,10 @@ def kur(g: Graph):
             a.add((u, v, c))
             forest.union(sets[u], sets[v])
 
+    for k in sets:
+        print(sets[k].p)
     print(a)
+    print(sum(s[2] for s in a))
     print('end----')
 
 
@@ -137,3 +139,38 @@ if __name__ == '__main__':
 
     print(g.v)
     print(g.c)
+
+    print('\n\n')
+    g = Graph(4)
+    g.insert_edge(0, 1, 1)
+    g.insert_edge(0, 2, 2)
+    g.insert_edge(2, 3, 4)
+    g.insert_edge(0, 3, 3)
+    # g.insert_edge(2, 3, 5)
+
+    print(g.v)
+    print(g.c)
+
+    # gp = prims(g)
+    kur(g)
+
+    print('\n\n')
+    g = Graph(7)
+    for u, v, c in [[2, 1, 87129], [3, 1, 14707], [4, 2, 34505], [5, 1, 71766], [6, 5, 2615], [7, 2, 37352]]:
+        g.insert_edge(u - 1, v - 1, c)
+    # g.insert_edge(0, 2, 2)
+    # g.insert_edge(2, 3, 4)
+    # g.insert_edge(0, 3, 3)
+    # g.insert_edge(2, 3, 5)
+
+    print(g.v)
+    print(g.c)
+
+    # gp = prims(g)
+    kur(g)
+    #
+    # print(gp.v)
+    # print(gp.c)
+    #
+    # print(g.v)
+    # print(g.c)
