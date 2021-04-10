@@ -40,11 +40,7 @@ def dijkstra(g: Graph, s):
     preprocessing = {s: Vert(s, 0)}
     for i in range(1, n + 1):
         if i != s:
-            print(i)
             preprocessing[i] = Vert(i)
-
-    for k in preprocessing:
-        print(preprocessing[k])
 
     h = list(preprocessing.values())
     heapify(h)
@@ -66,9 +62,6 @@ def main():
     edges = [[1, 2, 1], [1, 4, 3], [2, 3, 2], [2, 4, 1], [3, 5, 8], [4, 5, 2], [4, 6, 4], [6, 5, 1], [1, 6, 1]]
     for u, v, c in edges:
         g.add_edge(u, v, c)
-
-    print('(1, 4)', g.get_cost(1, 4))
-    print('(4, 5)', g.get_cost(4, 5))
 
     g = dijkstra(g, 1)
     for k in g:
