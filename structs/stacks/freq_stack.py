@@ -1,3 +1,4 @@
+import heapq
 from collections import defaultdict
 
 
@@ -37,14 +38,47 @@ class Freq:
             del self.stacks[self.max_index]
             self.max_index -= 1
 
-        return value
-
-    def __getitem__(self, item):
-        if item == 'push':
-            return lambda *x: self.push(*x)
-        if item == 'pop':
-            return lambda *x: self.pop(*x)
-
+# there is a bug in this implementation
+# class HeapNode:
+#     counter = 0
+#
+#     def __init__(self, value):
+#         self.value = value
+#         HeapNode.counter += 1
+#         self.counter = HeapNode.counter
+#         self.freq = 1
+#
+#     def __lt__(self, other):
+#         return self.freq > other.freq or \
+#                (self.freq == other.freq and self.counter > other.counter)
+#
+#     def __repr__(self):
+#         return f'(value={self.value}, freq={self.freq}, counter={self.counter})'
+#
+#
+# class Freq:
+#     def __init__(self):
+#         self.cache = {}
+#         self.heap = []
+#
+#     def push(self, value):
+#         if value not in self.cache:
+#             self.cache[value] = HeapNode(value)
+#             heapq.heappush(self.heap, self.cache[value])
+#             return
+#         self.cache[value].freq += 1
+#         heapq.heapify(self.heap)
+#
+#     def pop(self):
+#         print(self.heap)
+#         if len(self.heap) == 0:
+#             return None
+#
+#         top = heapq.heappop(self.heap)
+#         top.freq -= 1
+#         heapq.heappush(self.heap, top)
+#         return top.value
+#
 
 def main():
     f = Freq()
