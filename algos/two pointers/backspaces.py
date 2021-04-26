@@ -71,4 +71,5 @@ def main():
     print(backspace_compare_old("y#fo##f", "y#f#o##f"))
     # print(backspace_compare_old("bxj##tw", "bxj###tw"))
 
+
 main()

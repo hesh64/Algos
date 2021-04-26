@@ -16,8 +16,10 @@ def move_n_rings(n):
     move_rings(n, f_peg, t_peg, u_peg)
     return moves
 
+
 def main():
     n = 3
     print(move_n_rings(n))
+
 
 main()

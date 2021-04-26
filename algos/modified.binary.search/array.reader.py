@@ -4,6 +4,7 @@ import math
 COME BACK TO THIS
 """
 
+
 class ArrayReader:
 
     def __init__(self, arr):

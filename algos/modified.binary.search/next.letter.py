@@ -83,7 +83,7 @@ def main():
 
     result = number_range([4, 6, 6, 6, 9], key=6)
     print('smallest_letter', result)
-    
+
     result = number_range([1, 3, 8, 10, 15], key=10)
     print('smallest_letter', result)
 

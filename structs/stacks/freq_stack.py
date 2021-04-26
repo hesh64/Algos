@@ -38,6 +38,7 @@ class Freq:
             del self.stacks[self.max_index]
             self.max_index -= 1
 
+
 # there is a bug in this implementation
 # class HeapNode:
 #     counter = 0
@@ -96,5 +97,6 @@ def main():
     for fn, args in zip(l1, l2):
         print(f.stacks)
         print(f[fn](*args))
+
 
 main()

@@ -60,6 +60,7 @@ def print_tree(stream):
 
     # build the tree
     tree = attach_children(head, children)
+
     # print(tree.children)
 
     def _print(tree, tabs=0):

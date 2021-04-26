@@ -6,7 +6,6 @@ class Interval:
     def __lt__(self, other):
         return self.start
 
-
     def __repr__(self):
         return "[" + str(self.start) + ", " + str(self.end) + "]"
 
@@ -42,6 +41,7 @@ def find_employee_free_time(schedules):
     new_schedule.append(new_interval)
 
     return free_time
+
 
 def find_employee_free_time2(schedules):
     merged = []

@@ -33,4 +33,5 @@ def main():
     print(invert(array))
     print(invert([1]))
 
+
 main()

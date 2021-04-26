@@ -41,6 +41,7 @@ def reverse(head):
 
     return new_head
 
+
 def rearrange(head):
     half = get_half(head)
     half_reversed = reverse(half)
@@ -54,6 +55,8 @@ def rearrange(head):
         first_half = first_half
 
     return head
+
+
 def main():
     # rearrange()
 
@@ -66,5 +69,6 @@ def main():
     n = rearrange(node)
     print(n.value)
     print(n.next.value)
+
 
 main()

@@ -48,4 +48,5 @@ def main():
 
     print(ratings.max_stack)
 
+
 main()

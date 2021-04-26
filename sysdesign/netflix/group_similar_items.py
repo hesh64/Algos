@@ -2,6 +2,8 @@
 # O(n * k) Space
 
 """group words using anagrams"""
+
+
 def group_titles(strs):
     res = {}
     for s in strs:
@@ -26,5 +28,6 @@ def main():
     for g in gt:
         if query in g:
             print(g)
+
 
 main()

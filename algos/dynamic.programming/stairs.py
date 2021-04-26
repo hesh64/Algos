@@ -47,7 +47,7 @@ def hop_tab_space(n):
     for _ in range(3, n + 1):
         cur = last + second + third
         third, second, last = second, last, cur
-        
+
     return cur
 
 

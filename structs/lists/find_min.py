@@ -9,7 +9,7 @@ Implement a function findMinimum(lst) which finds the smallest number in the giv
 def find_minimum(lst):
     if not len(lst):
         return None
-    
+
     mini = float('inf')
     for ele in lst:
         if mini > ele:

@@ -2,6 +2,7 @@
 Implement a function that removes all the even elements from a given list. Name it remove_even(list).
 """
 
+
 # Time O(n)
 # Space O(n)
 def remove_event(l):

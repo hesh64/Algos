@@ -27,6 +27,7 @@ def my_version(n):
 
     return my(n)
 
+
 def my(n):
     if n == 0:
         return 1

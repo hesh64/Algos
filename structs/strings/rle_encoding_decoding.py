@@ -16,7 +16,7 @@ def encode(s):
                 letter = s[end]
                 count = 1
     rec.extend([str(count), letter])
-    
+
     return ''.join(rec)
 
 

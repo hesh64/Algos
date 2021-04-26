@@ -271,7 +271,6 @@ def main():
     result = smallest_substring_better("adcad", pattern="abc")
     print(result)
 
-
     print('\nlinear adjusted smallest window containing substring\n')
     result = smallest_substring_adjusted("aabdec", pattern="abc")
     print(result)

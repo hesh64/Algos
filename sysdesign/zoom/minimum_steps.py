@@ -1,4 +1,3 @@
-
 def min_steps(k):
     n = len(k)
     if n <= 1:

@@ -17,4 +17,5 @@ def find_all_permutations(arr):
 def main():
     print(find_all_permutations([1, 2, 3]))
 
+
 main()

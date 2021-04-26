@@ -19,4 +19,5 @@ def match_brackets(brackets):
 
     return True
 
+
 print(match_brackets('{]}'))

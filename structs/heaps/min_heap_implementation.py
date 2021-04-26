@@ -57,7 +57,6 @@ class MinHeap:
             self.__heapify(smallest)
 
 
-
 def main():
     heap = MinHeap()
 

@@ -1,4 +1,3 @@
-
 def validate(price):
     if len(price) == 0:
         return False

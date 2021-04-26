@@ -168,6 +168,7 @@ def find_words(root):
     _find_words(root, stack)
     return words
 
+
 def is_formation_possible(list, word):
     trie = Trie()
 

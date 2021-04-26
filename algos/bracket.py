@@ -34,4 +34,5 @@ def main():
     result = match_bracket(string)
     print(f'{string}', result)
 
+
 main()

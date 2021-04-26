@@ -178,7 +178,6 @@ class Graph:
                 temp = temp.next_element
             print("None")
 
-
 # def main():
 #     ll = LinkedList()
 #     ll.insert_at_head(1)
