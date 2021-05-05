@@ -105,3 +105,4 @@ my_max.enqueue(2)
 my_max.enqueue(0)
 print(my_max.elements)
 print(my_max.maxes)
+
