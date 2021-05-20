@@ -230,3 +230,6 @@ print(next_permutation(a))
 
 a = [2, 3, 1]
 print(next_permutation(a))
+
+a = [1, 2, 3, 4, 6, 5]
+print(next_permutation(a))
