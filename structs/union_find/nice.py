@@ -13,11 +13,12 @@ class UnionForest:
         self.sets = {}
 
     def make_set(self, x):
-        self.sets[x] = UnionSet(x)
+        if x not in self.sets:
+            self.sets[x] = UnionSet(x)
 
     def find_set(self, x):
         if self.sets[x] != self.sets[x].p:
-            self.sets[x].p = self.find_set(self.sets[x].p)
+            self.sets[x].p = self.find_set(self.sets[x].p.x)
         return self.sets[x].p
 
     def union(self, x, y):
@@ -54,3 +55,47 @@ def init():
 
 
 init()
+
+
+def link_accounts():
+    accounts = [["Sarah", "sarah22@email.com", "sarah@gmail.com", "sarahhoward@email.com"],
+                ["Alice", "alicexoxo@email.com", "alicia@email.com", "alicelee@gmail.com"],
+                ["Sarah", "sarah@gmail.com", "sarah10101@gmail.com"],
+                ["Sarah", "sarah10101@gmail.com", "misshoward@gmail.com"]
+                ]
+
+    email_to_name = {}
+    name_to_emails = {}
+    forest = UnionForest()
+    for account in accounts:
+        for i in range(1, len(account)):
+            forest.make_set(account[i])
+            email_to_name[forest.find_set(account[i]).x] = account[0]
+            if i > 1:
+                forest.union(account[i - 1], account[i])
+
+    """
+    yes i grouped them by name, but in reality that's a trivial detail. Instead of storing just the email
+    in the set, store a tuple(email, name) or named tuple then just reference that from the parent set
+    badabing badaboom
+    """
+    for s in forest.sets:
+        parent_key = email_to_name[forest.find_set(s).x]
+        if parent_key not in name_to_emails:
+            name_to_emails[parent_key] = []
+        name_to_emails[parent_key].append(s)
+
+    return [[name, *emails] for name, emails in name_to_emails.items()]
+
+
+print(link_accounts())
+
+forest = UnionForest()
+# n sets
+forest.make_set('a')
+forest.make_set('b')
+forest.make_set('c')
+# n-1 unions
+forest.union('c', 'b')
+forest.union('b', 'a')
+print(forest)
