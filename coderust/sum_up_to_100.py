@@ -3,9 +3,9 @@ def find_all_sums_to_100(input):
         return 0
     combo = []
 
-    def helper(start, end, total, string):
+    def helper(start, end, total, stack):
         if start == end and total == 100:
-            combo.append(string)
+            combo.append(''.join(stack))
             return True
 
         if start == end:
@@ -16,13 +16,19 @@ def find_all_sums_to_100(input):
                 break
 
             num = int(input[start: start + k])
-            helper(start + k, end, -num + total, string + str(-num))
-            helper(start + k, end, num + total, string + '+' + str(num) if len(string) else str(num))
+
+            stack.append(str(-num))
+            helper(start + k, end, -num + total, stack)
+            stack.pop()
+
+            stack.append('+' + str(num) if len(stack) else str(num))
+            helper(start + k, end, num + total, stack)
+            stack.pop()
 
         return combo
 
-    return helper(0, len(input), 0, '')
+    return helper(0, len(input), 0, [])
 
 
-for w in find_all_sums_to_100('123456789'):
-    print(w)
+for i, w in enumerate(find_all_sums_to_100('123456789')):
+    print(i + 1, w)
