@@ -383,3 +383,52 @@ def trans_string(D, s, t):
 
 
 print(trans_string(words, 'cat', 'dog'))
+
+"""
+Intro to algorithms style bfs"""
+print('\n\nIntro to algorithms style bfs')
+
+
+def bfs(g: Graph, s):
+    white, grey, black = range(3)
+    color, rank, parent = 'c', 'd', 'p'
+
+    # preprocessing
+    vertices = {i: {color: white, rank: float('inf'), parent: None} for i in range(g.vertices)}
+    # setup s
+    vertices[s][color] = grey
+    vertices[s][rank] = 0
+
+    q = deque([s])
+    while q:
+        u = q.popleft()
+        for v in g.edges[u]:
+            vertices[v][color] = grey
+            vertices[v][rank] = vertices[u][rank] + 1
+            vertices[v][parent] = u
+
+            q.append(v)
+
+        vertices[u][color] = black
+
+    return vertices
+
+
+def print_path(vertices, s, v):
+    parent = 'p'
+
+    if s == v:
+        print(v)
+    elif vertices[v][parent] is None:
+        print('No path exists')
+    else:
+        print(v)
+        print_path(vertices, s, vertices[v][parent])
+
+
+g = Graph(22, [[0, 1], [0, 2], [1, 3], [2, 3], [2, 4], [4, 5], [3, 5], [1, 7], [7, 6], [3, 6], [6, 15], [7, 8], [8, 10],
+               [10, 11], [11, 12], [12, 13], [13, 14], [14, 21], [11, 18], [9, 11], [9, 16], [6, 9], [15, 16],
+               [16, 17], [17, 19], [18, 19], [19, 20], [20, 21]])
+
+vertices = bfs(g, 0)
+print_path(vertices, 0, 5)
