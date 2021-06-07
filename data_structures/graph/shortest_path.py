@@ -33,16 +33,27 @@ def shortest_path_dijakstra(g, s):
     while in_tree[v] is False:
         in_tree[v] = True
 
+        # visit all of v's neighbors, if any of them are currently recorded
+        # at a greater distance than the distance from (s to v) + g.weight(v, w)
+        # then update distance w to be s to v + g.weight(v, w) also update the parent
         for w in g.edges[v]:
             if distance[w] > distance[v] + g.weights[(v, w)]:
                 distance[w] = distance[v] + g.weights[(v, w)]
                 parent[w] = v
 
+        # this is an mst algorithm so naturally it's copying prims vertex selection!
         v = 1
         dist = float('inf')
         for i in range(g.vertices):
             if in_tree[i] is False and dist > distance[i]:
-                dist = dist[i]
+                dist = distance[i]
                 v = i
 
+    return distance, parent
 
+
+g = Graph(6)
+for u, v, w in [[0, 4, 1], [0, 1, 3], [0, 2, 3], [1, 4, 1], [1, 3, 3], [3, 2, 3], [3, 4, 1], [2, 4, 1], [2, 5, 10]]:
+    g.add_edge(u, v, w)
+
+print(shortest_path_dijakstra(g, 0))

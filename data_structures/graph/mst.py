@@ -68,18 +68,26 @@ def prims_mst(g, s):
     while in_tree[v] is False:
         in_tree[v] = True
 
+        # we are visiting all of v's neighbors and checking this minimum recorded distance
+        # who can reach them at the cheapest? if it's w then we update their distance to g.weights[(v,w)]
         for w in g.edges[v]:
             if distance[w] > g.weights[(v, w)] and in_tree[w] is False:
                 distance[w] = g.weights[(v, w)]
                 parent[w] = v
 
-        v = 1
+        # we just tried to update some distances in the previous for loop, IF that changed anything
+        # then find this new vertex whos distance became at the very least less than inf, and if it's not
+        # in the tree then let's select it for the next iteraton. otherwise, we keep v at a prev selected
+        # vertex that way the while loop won't run again because v is already in the tree
+        v = s
         dist = float('inf')
         for i in range(g.vertices):
             if in_tree[i] is False and dist > distance[i]:
+                print(i, distance[i])
                 dist = distance[i]
                 v = i
 
+    print('constructing mst')
     print(distance, parent)
 
     for k in parent:
