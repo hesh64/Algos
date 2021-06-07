@@ -22,7 +22,6 @@ def backtrack(a, k, input,
         else:
             k += 1
 
-            # c, ncandidates = construct_candidates(a, k, input, c, ncandidates)
             c, ncandidates = construct_candidates(a, k, input)
 
             for i in range(ncandidates):
@@ -186,26 +185,57 @@ random.seed(42)
 
 
 def solve_sudoku(b):
-    def next_square(b):
-        p = (random.randint(1, 9), random.randint(1, 9))
-        while b.m[p[0]][p[1]] is not None:
-            p = (random.randint(1, 9), random.randint(1, 9))
-        return p
-
     def possible_next_moves(x, y, b):
-        available = set([i for i in range(1, 10)])
+        taken = set()
 
         for i in range(1, 10):
-            if b.m[i][y] is not None and b.m[i][y] in available:
-                available.remove(b.m[i][y])
+            if b.m[i][y] is not None:
+                taken.add(b.m[i][y])
 
         for j in range(1, 10):
-            if b.m[x][j] is not None and b.m[x][j] in available:
-                available.remove(b.m[x][j])
+            if b.m[x][j] is not None:
+                taken.add(b.m[x][j])
 
-        return list(available)
+        sx = x
+        sy = y
+        if sx <= 3:
+            sx = 1
+        elif sx <= 6:
+            sx = 4
+        else:
+            sx = 7
+
+        if sy <= 3:
+            sy = 1
+        elif sy <= 6:
+            sy = 4
+        else:
+            sy = 7
+
+        for i in range(sx, sx + 3):
+            for j in range(sy, sy + 3):
+                if b.m[i][j] is not None:
+                    taken.add(b.m[i][j])
+
+        return set(range(1, 10)) - taken
+
+    def next_square(b):
+        p = -1, -1
+        possible_moves = list(range(1, 10))
+        for i in range(1, 10):
+            for j in range(1, 10):
+                if b.m[i][j] is None:
+                    pm = possible_next_moves(i, j, b)
+                    if len(pm) < len(possible_moves):
+                        p = i, j
+                        possible_moves = list(pm)
+
+        return p[0], p[1], possible_moves
+
+    counter = [0]
 
     def is_a_solution(a, k, b):
+        counter[0] += 1
         return b.freecount == 0
 
     def process_solution(a, k, b):
@@ -213,11 +243,8 @@ def solve_sudoku(b):
         return True
 
     def construct_candidates(a, k, b):
-        x, y = next_square(b)
-
+        x, y, next_move_candidates = next_square(b)
         b.move[k] = Point(x, y)
-
-        next_move_candidates = possible_next_moves(x, y, b)
 
         return next_move_candidates, len(next_move_candidates)
 
@@ -243,14 +270,15 @@ def solve_sudoku(b):
 b = Board([[1, 8, 1], [1, 9, 2], [2, 5, 3], [2, 6, 5],
            [3, 4, 6], [3, 8, 7], [4, 1, 7], [4, 7, 3], [5, 4, 4], [5, 7, 8],
            # [6, 1, 1], [7, 4, 1], [7, 5, 2], [8, 2, 8], [8, 8, 4], [9, 2, 5],
-           [9, 7, 6], [1, 1, 6], [2, 1, 9], [3, 1, 8], [5, 1, 5], [7, 1, 4],
+           # [9, 7, 6], [1, 1, 6], [2, 1, 9], [3, 1, 8], [5, 1, 5], [7, 1, 4],
            # [1, 2, 7], [1, 3, 3], [1, 4, 8], [1, 5, 9], [1, 6, 4], [2, 2, 1],
-           [2, 3, 2], [2, 4, 7], [2, 7, 4], [2, 9, 6], [9, 9, 8], [9, 1, 3],
-           [9, 4, 9], [9, 5, 4], [6, 2, 3], [6, 3, 4], [6, 4, 5], [6, 5, 8],
+           # [2, 3, 2], [2, 4, 7], [2, 7, 4], [2, 9, 6], [9, 9, 8], [9, 1, 3],
+           # [9, 4, 9], [9, 5, 4], [6, 2, 3], [6, 3, 4], [6, 4, 5], [6, 5, 8],
            # [6, 6, 9], [6, 7, 2], [6, 8, 6], [6, 9, 7], [4, 2, 9], [4, 3, 8],
-           [4, 4, 2], [4, 5, 6], [8, 1, 2], [8, 3, 7], [8, 4, 3], [8, 5, 5],
-           [8, 6, 6], [8, 7, 1], [8, 8, 4], [8, 9, 9], [7, 7, 7], [7, 8, 3],
-           [7, 9, 5], [4, 8, 5], [3, 2, 4], [3, 3, 5]],
+           # [4, 4, 2], [4, 5, 6], [8, 1, 2], [8, 3, 7], [8, 4, 3], [8, 5, 5],
+           # [8, 6, 6], [8, 7, 1], [8, 8, 4], [8, 9, 9], [7, 7, 7], [7, 8, 3],
+           # [7, 9, 5], [4, 8, 5], [3, 2, 4], [3, 3, 5]
+           ],
           )
 print(b.freecount)
 b.p()
