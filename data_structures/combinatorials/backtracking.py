@@ -34,7 +34,6 @@ def backtrack(a, k, input,
 
                 unmake_move(a, k, input)
 
-
     helper(a, k, input)
 
 
@@ -287,3 +286,36 @@ b = Board([[1, 8, 1], [1, 9, 2], [2, 5, 3], [2, 6, 5],
 print(b.freecount)
 b.p()
 print(solve_sudoku(b))
+
+
+class TreeNode:
+    def __init__(self, value, parent=None, left=None, right=None):
+        self.value, self.parent, self.let, self.right = value, parent, left, right
+
+
+"""
+    0
+    
+
+      1  0
+     /    \
+    0      1
+    
+        2                   2    0
+       /                   /      \
+      1         1         0        1
+     /         / \         \        \
+    0         0   2         1        2
+
+
+
+
+          3                                             
+         /                                3                        
+        2       2        1               /                            2    0
+       /       / \      / \             1                            /      \
+      1       1   3    0   2           / \                1         0        1
+     /       /              \         0   2              / \         \        \
+    0       0                3                          0   2         1        2
+                    
+"""
