@@ -60,33 +60,31 @@ class Cell:
         return f'({self.cost}, {MOVES[self.parent] if self.parent in MOVES else self.parent})'
 
 
-def init_col(m):
+def init_col(m, i, j):
     '''
     init col 0
     :param m:
     :return:
     '''
-    for i in range(len(m)):
-        m[i][0].cost = i
+    m[i][0].cost = i
+    m[i][0].parent = -1
+    if i > 0:
+        m[i][0].parent = DELETE
+    else:
         m[i][0].parent = -1
-        if i > 0:
-            m[i][0].parent = DELETE
-        else:
-            m[i][0].parent = -1
 
 
-def init_row(m):
+def init_row(m, i, j):
     '''
     init row 0
     :param m:
     :return:
     '''
-    for j in range(len(m[0])):
-        m[0][j].cost = j
-        if j > 0:
-            m[0][j].parent = INSERT
-        else:
-            m[0][j].parent = -1
+    m[0][j].cost = j
+    if j > 0:
+        m[0][j].parent = INSERT
+    else:
+        m[0][j].parent = -1
 
 
 def process_result(s, t, m, i, j):
@@ -112,8 +110,10 @@ def string_compare(s, t, process_result, init_row, init_col, goal_cell):
     m: List[List[Cell]] = [[Cell(0) for _ in range(max_len)] for _ in range(max_len)]
 
     # customizable initialization
-    init_col(m)
-    init_row(m)
+    for j in range(max_len):
+        init_col(m, 0, j)
+    for i in range(max_len):
+        init_row(m, i, 0)
 
     # business logic
     opts = [None] * 3
